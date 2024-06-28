@@ -7,6 +7,7 @@ def get_mysql_connection():
         user="javax2",
         password="77754abel867",
         database="administracionWY"
+        port="3306"
     )
 def drop_tables():
     conn = get_mysql_connection()
