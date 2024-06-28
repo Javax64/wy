@@ -1,13 +1,13 @@
 
 import mysql.connector
-
+import os
 def get_mysql_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="javax2",
-        password="77754abel867",
-        database="administracionWY",
-        port=3306
+        host=os.getenv("MYSQLHOST"),
+        user=os.getenv("MYSQLUSER"),
+        password=os.getenv("MYSQLPASSWORD"),
+        database=os.getenv("MYSQLDATABASE"),
+        port=int(os.getenv("MYSQLPORT", 3306))
     )
 def drop_tables():
     conn = get_mysql_connection()
