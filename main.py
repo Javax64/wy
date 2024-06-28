@@ -2597,13 +2597,18 @@ def server_static(filepath):
 @app.error(404)
 def error404(error):
     return static_file('404.html', root='web')
-
+@app.route('/hello')
+def hello():
+    return "Hello World!"
 def start_server():
-    eel.init('web')
-    # Iniciar Eel con Bottle como el servidor
-    eel.start('login.html', mode=None, host='0.0.0.0', port=8000, app=app)
+    #eel.init('web')
+    #Iniciar Eel con Bottle como el servidor
+    #eel.start('login.html', mode=None, host='0.0.0.0', port=8000, app=app)
     #eel.start('login.html', mode=None, host='localhost', port=8000, app=app)
-  
+    eel.init('web')
+    port = int(os.environ.get("PORT", 8000))  # Usar el puerto proporcionado por Railway
+    print(f"Starting server on port {port}...")
+    eel.start('index.html', mode=None, host='0.0.0.0', port=port, app=app)
 
 if __name__ == '__main__':
     start_server()
