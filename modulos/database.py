@@ -1,13 +1,12 @@
 
 import mysql.connector
-import os
+
 def get_mysql_connection():
     return mysql.connector.connect(
-        host=os.getenv("viaduct.proxy.rlwy.net"),
-        user=os.getenv("root"),
-        password=os.getenv("PvvmJGhKRdMNPteYMCRrqctosuBvEbFs"),
-        database=os.getenv("railway"),
-        port=int(os.getenv("58367", 3306))
+        db_host="localhost",
+        db_user="javax2",
+        db_password="77754abel867",
+        db_database="administracionWY"
     )
 def drop_tables():
     conn = get_mysql_connection()
