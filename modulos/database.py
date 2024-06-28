@@ -3,10 +3,10 @@ import mysql.connector
 
 def get_mysql_connection():
     return mysql.connector.connect(
-        db_host="localhost",
-        db_user="javax2",
-        db_password="77754abel867",
-        db_database="administracionWY"
+        host="localhost",
+        user="javax2",
+        password="77754abel867",
+        database="administracionWY"
     )
 def drop_tables():
     conn = get_mysql_connection()
