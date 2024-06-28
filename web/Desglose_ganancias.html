@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/desglose_ganancias.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+        </div>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="products.html">Gestión de Productos</a></li>
+            <li><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li class="active"><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+    </div>
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Dashboard</h1>
+        </header>
+        <main>
+            <button class="filter-toggle-btn" onclick="toggleFilters()">Mostrar/Ocultar Filtros</button>
+            <div class="filters" id="filters">
+                <h2>Filtros</h2>
+                <form id="filterForm">
+                    <label for="product">Producto:</label>
+                    <select id="product" name="product">
+                        <!-- Productos cargados dinámicamente -->
+                    </select>
+                    
+                    <label for="dateRange">Rango de Fechas:</label>
+                    <input type="date" id="startDate" name="startDate">
+                    <input type="date" id="endDate" name="endDate">
+                    
+                    <label for="exactDate">Fecha Exacta:</label>
+                    <input type="date" id="exactDate" name="exactDate">
+                    
+                    <label for="month">Mes:</label>
+                    <input type="month" id="month" name="month">
+                    
+                    <label for="groupBy">Agrupar Por:</label>
+                    <select id="groupBy" name="groupBy">
+                        <option value="day">Día</option>
+                        <option value="week">Semana</option>
+                        <option value="month">Mes</option>
+                        <option value="year" selected>Año</option>
+                    </select>
+
+                    <label for="paymentMethod">Método de Pago:</label>
+                    <select id="paymentMethod" name="paymentMethod">
+                        <option value="all">Todos</option>
+                        <option value="transfer">Transferencia</option>
+                        <option value="cash">Efectivo</option>
+                    </select>
+
+                    <button type="submit">Aplicar Filtros</button>
+                </form>
+            </div>
+            <div class="totals">
+                <div class="total-container">
+                    <h3>Ventas Totales</h3>
+                    <div class="total-value" id="totalSalesValue">0</div>
+                    <div class="total-breakdown">
+                        <span>Efectivo: <span id="totalSalesCash">0</span></span>
+                        <span>Transferencia: <span id="totalSalesTransfer">0</span></span>
+                    </div>
+                </div>
+                <div class="total-container">
+                    <h3>Adelantos Totales</h3>
+                    <div class="total-value" id="totalAdvancesValue">0</div>
+                    <div class="total-breakdown">
+                        <span>Efectivo: <span id="totalAdvancesCash">0</span></span>
+                        <span>Transferencia: <span id="totalAdvancesTransfer">0</span></span>
+                    </div>
+                </div>
+                <div class="total-container">
+                    <h3>Pedidos Completados</h3>
+                    <div class="total-value" id="totalCompletedOrdersValue">0</div>
+                    <div class="total-breakdown">
+                        <span>Efectivo: <span id="totalCompletedOrdersCash">0</span></span>
+                        <span>Transferencia: <span id="totalCompletedOrdersTransfer">0</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="charts">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Ventas</h3>
+                        <label id="totalSales">Total: 0</label>
+                    </div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Adelantos de Pedidos</h3>
+                        <label id="totalAdvances">Total: 0</label>
+                    </div>
+                    <canvas id="advancesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Pedidos Completados</h3>
+                        <label id="totalCompletedOrders">Total: 0</label>
+                    </div>
+                    <canvas id="completedOrdersChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Global</h3>
+                        <label id="totalGlobal">Total: 0</label>
+                    </div>
+                    <canvas id="globalChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="js/desglose.js"></script>
+</body>
+</html>

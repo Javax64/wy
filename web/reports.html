@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Analytics</title>
+    <link rel="stylesheet" href="css/reports.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="widget">
+            <h3>Total target</h3>
+            <p id="totalTarget">$150,700</p>
+        </div>
+        <div class="widget">
+            <h3>Total actual to date</h3>
+            <p id="totalActual">$148,210</p>
+        </div>
+        <div class="widget">
+            <h3>Sales activity by rep</h3>
+            <canvas id="activityChart"></canvas>
+        </div>
+        <div class="widget">
+            <h3>Forecasted by month</h3>
+            <canvas id="monthlySalesChart"></canvas>
+        </div>
+        <div class="widget">
+            <h3>Pipeline breakdown</h3>
+            <canvas id="pipelineChart"></canvas>
+        </div>
+        <div class="widget">
+            <h3>Quota attainment to date</h3>
+            <canvas id="quotaChart"></canvas>
+        </div>
+    </div>
+
+    <script src="js/reports.js"></script>
+</body>
+</html>

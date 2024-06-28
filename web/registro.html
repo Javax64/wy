@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="css/orders.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #333333;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoGeneral;
+        
+        async function registrarUsuario() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = 'user';  // Forzar el rol a 'user'
+            const response = await eel.registrar_usuario(username, password, role)();
+            if (response.status === 'success') {
+                alert('Usuario registrado exitosamente');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                fetchUsers();
+            } else {
+                alert('Error al registrar el usuario: ' + response.message);
+            }
+        }
+
+        async function fetchUsers() {
+            const users = await eel.get_users()();
+            const usersTableBody = document.getElementById('usersTableBody');
+            usersTableBody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                const usernameCell = document.createElement('td');
+                const roleCell = document.createElement('td');
+                const actionsCell = document.createElement('td');
+                const deleteButton = document.createElement('button');
+
+                usernameCell.textContent = user.username;
+                roleCell.textContent = user.role;
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.onclick = function() {
+                    openDeleteModal(user.username);
+                };
+
+                actionsCell.appendChild(deleteButton);
+                row.appendChild(usernameCell);
+                row.appendChild(roleCell);
+                row.appendChild(actionsCell);
+
+                usersTableBody.appendChild(row);
+            });
+        }
+
+        async function eliminarUsuario(username) {
+            const response = await eel.eliminar_usuario(username)();
+            if (response.status === 'success') {
+                alert('Usuario eliminado exitosamente');
+                fetchUsers();
+            } else {
+                alert('Error al eliminar el usuario: ' + response.message);
+            }
+        }
+
+        function openDeleteModal(username) {
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteConfirmButton = document.getElementById('deleteConfirmButton');
+            deleteConfirmButton.onclick = function() {
+                eliminarUsuario(username);
+                closeDeleteModal();
+            };
+            deleteModal.style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            const deleteModal = document.getElementById('deleteModal');
+            deleteModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchUsers);
+        
+    </script>
+    <script>
+        function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+    var mainContent = document.getElementById("main-content");
+    sidebar.classList.toggle("active");
+    if (sidebar.classList.contains("active")) {
+        mainContent.classList.add("expanded");
+    } else {
+        mainContent.classList.remove("expanded");
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="products.html">Gestión de Productos</a></li>
+            <li ><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li><a href="qr_generator.html">Stock de Productos</a></li>
+            <li ><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li class="active"><a href="registro.html">Registro de Usuarios</a></li>
+        </ul>
+    </div>
+    <div class="main-content" id="main-content">
+        
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Registro de Usuarios</h1>
+        </header>
+        <div class="form-container">
+            <form id="registerForm" onsubmit="registrarUsuario(); return false;">
+                <input type="text" id="username" placeholder="Nombre de usuario" required><br>
+                <input type="password" id="password" placeholder="Contraseña" required><br>
+                <button type="submit">Registrar</button>
+            </form>
+        </div>
+        
+        <h2>Usuarios Registrados</h2>
+        <div class="form-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre de Usuario</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Aquí se cargarán los usuarios -->
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    <!-- Modal para confirmación de eliminación -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteModal()">&times;</span>
+            <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+            <button id="deleteConfirmButton">Eliminar</button>
+            <button onclick="closeDeleteModal()">Cancelar</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="/eel.js"></script>
+</body>
+</html>

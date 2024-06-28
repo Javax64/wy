@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/orders.css">
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoAdmin;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Gestión de Productos</title>
+    <style>
+        .btn-active { background-color: green; color: white; }
+        .btn-inactive { background-color: red; color: white; }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li class="active"><a href="products.html">Gestión de Productos</a></li>
+            <li><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li><a href="qr_generator.html">Stock de Productos</a></li>
+            <li><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li ><a href="registro.html">Registrar Usuario</a></li>
+        </ul>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmationModal()">&times;</span>
+            <p id="confirmationMessage">¿Está seguro de que desea eliminar este producto?</p>
+            <button id="confirmDeleteButton">Confirmar</button>
+            <button onclick="closeConfirmationModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Gestión de Productos</h1>
+        </header>
+        <main>
+            <div class="form-container">
+                <div class="form-column">
+                    <h2 id="formTitle">Gestión de Productos</h2>
+                    <form id="productForm">
+                        <div class="form-group">
+                            <label for="productName">Nombre del Producto:</label>
+                            <input type="text" id="productName" name="productName">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Precio del Producto:</label>
+                            <input type="number" step="0.01" id="productPrice" name="productPrice">
+                        </div>
+                    </form>
+                </div>
+                <div class="form-column">
+                    <form id="extraForm">
+                        <div class="form-group">
+                            <label for="extraName">Nombre del Extra:</label>
+                            <input type="text" id="extraName" name="extraName">
+                        </div>
+                        <div class="form-group">
+                            <label for="extraPrice">Precio del Extra:</label>
+                            <input type="number" step="0.01" id="extraPrice" name="extraPrice">
+                        </div>
+                        <button class="btn-add" type="button" onclick="addExtra()">Añadir Extra</button>
+                    </form>
+                </div>
+                <div class="form-column">
+                    <h2>Lista de Extras</h2>
+                    <table id="extraTable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="save-button-container">
+                <button class="btn-save" type="button" onclick="saveProduct()">Guardar Producto</button>
+            </div>
+            <h2>Lista de Productos</h2>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Extras</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="js/products.js"></script>
+</body>
+</html>

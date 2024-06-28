@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Vendedores</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoGeneral;
+    </script>
+</head>
+<body>
+    <header>
+        <img src="img/logo5.png" alt="Logo" class="logo">
+        <h1>Menú de Ventas y Entregas</h1>
+        
+        <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        
+        
+    </header>
+    <main>
+        <nav class="menu">
+            <ul>
+                <li><a href="ventas.html" class="btn">VENTAS</a></li>
+                <li><a href="scan_qr.html" class="btn">PEDIDOS</a></li>
+            </ul>
+        </nav>
+    </main>
+    <script type="text/javascript" src="/eel.js"></script>
+</body>
+</html>

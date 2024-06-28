@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Códigos QR</title>
+    <link rel="stylesheet" href="css/qrgenerator.css">
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoAdmin;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://unpkg.com/@zxing/library@0.18.6/umd/index.js"></script>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li ><a href="index.html">Dashboard</a></li>
+            <li><a href="products.html">Gestión de Productos</a></li>
+            <li ><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li class="active" ><a href="qr_generator.html">Stock de Productos</a></li>
+            <li ><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li ><a href="registro.html">Registrar Usuario</a></li>
+            
+        </ul>
+    </div>
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Generador de Códigos QR</h1>
+        </header>
+        <main>
+            <div id="alertsContainer" class="alerts-container"></div>
+            <form id="qrForm">
+                <label for="productId">Producto:</label>
+                <select id="productId" required>
+                    <!-- Productos cargados dinámicamente -->
+                </select>
+                <label for="quantity">Cantidad:</label>
+                <input type="number" id="quantity" min="1" required>
+                <button type="submit">Generar e Imprimir QR</button>
+            </form>
+            <button id="printOnlyQRButton">Solo Imprimir QR</button>
+            <button id="openScannerButton">Escanear Productos</button>
+            <h2>Stock de Productos</h2>
+            <table id="stockTable">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad Disponible</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Stock de productos cargado dinámicamente -->
+                </tbody>
+            </table>
+            <!-- Modal de confirmación -->
+            <div id="confirmationModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeConfirmationModal()">&times;</span>
+                    <p id="confirmationText"></p>
+                    <div class="button-container">
+                        <button id="confirmButton">Confirmar</button>
+                        <button id="cancelButton" onclick="closeConfirmationModal()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para reducción de stock -->
+            <div id="reduceStockModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeReduceStockModal()">&times;</span>
+                    <h2>Reducción de Stock</h2>
+                    <form id="reduceStockForm" onsubmit="reduceStock(); return false;">
+                        <input type="hidden" id="reduceProductId">
+                        <label for="reduceQuantity">Cantidad a reducir:</label>
+                        <input type="number" id="reduceQuantity" min="1" required>
+                        <label for="authorizationCode">Código de autorización:</label>
+                        <input type="password" id="authorizationCode" required>
+                        <div class="button-container">
+                            <button type="submit">Reducir Stock</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Modal para escaneo de productos -->
+            <div id="scannerModal" class="modal">
+                <div class="modal-content scanner-modal-content">
+                    <span class="close" id="closeScannerModal">&times;</span>
+                    <h2>Escanear Productos</h2>
+                    <div class="video-container">
+                        <video id="video" class="scanner-video"></video>
+                        <div id="scannerFrame">
+                            <div class="corner top-left"></div>
+                            <div class="corner top-right"></div>
+                            <div class="corner bottom-left"></div>
+                            <div class="corner bottom-right"></div>
+                            <div id="scanline"></div>
+                        </div>
+                    </div>
+                    <div id="scannedProductsList"></div>
+                    <div class="button-container">
+                        <button id="closeScannerModalButton">Cerrar</button>
+                        <button id="scanButton">Escanear</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para verificación de contraseña -->
+            <div id="passwordModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" id="closePasswordModal">&times;</span>
+                    <h2>Ingrese la Clave</h2>
+                    <form id="passwordForm">
+                        <label for="scannerPassword">Clave:</label>
+                        <input type="password" id="scannerPassword" required>
+                        <div class="button-container">
+                            <button type="submit">Acceder</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="js/qr_generator.js"></script>
+</body>
+</html>

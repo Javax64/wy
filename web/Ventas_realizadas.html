@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas Realizadas</title>
+    <link rel="stylesheet" href="css/orders.css">
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoAdmin;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteModal()">&times;</span>
+            <h2>Confirmar Eliminación</h2>
+            <p>Por favor, ingresa el código de autorización para eliminar esta venta.</p>
+            <input type="password" id="authorizationCode" placeholder="Código de autorización">
+            <div class="modal-footer">
+                <button class="btn-save" id="confirmDeleteButton">Eliminar</button>
+                <button class="btn-back" onclick="closeDeleteModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dentro del div con id="editModal" -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Editar Venta</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody id="editProductTable">
+                    <!-- Productos serán cargados dinámicamente -->
+                </tbody>
+            </table>
+            <label for="editPaymentMethod">Método de Pago:</label>
+            <select id="editPaymentMethod">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+            </select>
+            <label for="editAuthorizationCode">Código de Autorización:</label>
+            <input type="password" id="editAuthorizationCode" placeholder="Código de autorización">
+            <div class="modal-footer">
+                <button class="btn-save" id="saveEditButton">Guardar Cambios</button>
+                <button class="btn-back" onclick="closeEditModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li ><a href="index.html">Dashboard</a></li>
+            <li><a href="products.html">Gestión de Productos</a></li>
+            <li ><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li class="active"><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li ><a href="qr_generator.html">Stock de Productos</a></li>
+            <li ><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li ><a href="registro.html">Registrar Usuario</a></li>
+            
+        </ul>
+    </div>
+    
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Ventas Realizadas</h1>
+        </header>
+        <main>
+            <div id="alertsContainer" class="alerts-container"></div>
+            <div id="filters">
+                <label for="filterDate">Fecha:</label>
+                <input type="date" id="filterDate">
+                <label for="filterStartDate">Desde:</label>
+                <input type="date" id="filterStartDate">
+                <label for="filterEndDate">Hasta:</label>
+                <input type="date" id="filterEndDate">
+                <label for="filterPaymentMethod">Método de Pago:</label>
+                <select id="filterPaymentMethod">
+                    <option value="all">Todos</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                </select>
+                <label for="filterProductName">Producto:</label>
+                <select id="filterProductName"></select>
+            </div>
+            <div id="salesSummary">
+                <div class="sales-summary-item">
+                    <h3>Ventas Diarias</h3>
+                    <p id="dailySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Semanales</h3>
+                    <p id="weeklySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Mensuales</h3>
+                    <p id="monthlySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Anuales</h3>
+                    <p id="annualSales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Totales</h3>
+                    <p id="totalSales">0 Bs</p>
+                </div>
+            </div>
+            <table id="salesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Productos</th>
+                        <th>Total</th>
+                        <th>Fecha de Venta</th>
+                        <th>Método de Pago</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="pagination"></div>
+        </main>
+    </div>
+    <div id="alertsContainer" class="alerts-container"></div>
+    <script>
+        function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+    var mainContent = document.getElementById("main-content");
+    sidebar.classList.toggle("active");
+    if (sidebar.classList.contains("active")) {
+        mainContent.classList.add("expanded");
+    } else {
+        mainContent.classList.remove("expanded");
+    }
+}
+    </script>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="js/ventas_realizadas.js"></script>
+</body>
+</html>

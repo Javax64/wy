@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/orders.css">
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoAdmin;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+    <title>Gestión de Pedidos Completados</title>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li ><a href="index.html">Dashboard</a></li>
+            <li ><a href="products.html">Gestión de Productos</a></li>
+            <li ><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li ><a href="qr_generator.html">Stock de Productos</a></li>
+            <li class="active"><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li ><a href="registro.html">Pedidos Entregados</a></li>
+            
+        </ul>
+    </div>
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Gestión de Pedidos Completados</h1>
+        </header>
+        <main>
+            <div id="alertsContainer" class="alerts-container"></div>
+            <div id="filterContainer">
+                <label for="filterStartDate">Fecha de Inicio:</label>
+                <input type="date" id="filterStartDate">
+                <label for="filterEndDate">Fecha de Fin:</label>
+                <input type="date" id="filterEndDate">
+                <label for="filterMonth">Mes:</label>
+                <input type="month" id="filterMonth">
+                <label for="filterDate">Fecha Exacta:</label>
+                <input type="date" id="filterDate">
+                <label for="filterText">Buscar:</label>
+                <input type="text" id="filterText" placeholder="Nombre o Teléfono">
+            </div>
+            <div id="salesSummary">
+                <div class="sales-summary-item">
+                    <h3>Ventas Diarias</h3>
+                    <p id="dailySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Semanales</h3>
+                    <p id="weeklySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Mensuales</h3>
+                    <p id="monthlySales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Ventas Anuales</h3>
+                    <p id="annualSales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Transferencia</h3>
+                    <p id="transferSales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Efectivo</h3>
+                    <p id="cashSales">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Total Ventas</h3>
+                    <p id="totalSales">0 Bs</p>
+                </div>
+            </div>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Cliente</th>
+                        <th>Celular</th>
+                        <th>Precio Total</th>
+                        <th>Saldo</th>
+                        <th>Fecha de Entrega</th>
+                        <th>Metodo de Pago</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="paginationContainer">
+                <button id="prevPage">Anterior</button>
+                <span>Página <span id="currentPage">1</span></span>
+                <button id="nextPage">Siguiente</button>
+            </div>
+        </main>
+    </div>
+    
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/pedidos_entregados.js"></script>
+</body>
+</html>

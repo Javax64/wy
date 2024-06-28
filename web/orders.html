@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="css/orders.css">
+    <title>Gestión de Pedidos</title>
+    <style>
+        /* Ocultar el contenido por defecto */
+        body {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.1s linear;
+        }
+    </style>
+    <script src="js/login.js"></script>
+    <script type="text/javascript">
+        window.onload = verificarAccesoAdmin;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<body>
+    <!-- Agregar este modal debajo del modal de confirmación existente -->
+<div id="printOptionsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePrintOptionsModal()">&times;</span>
+        <h2>Opciones de Impresión</h2>
+        <button id="printTicketButton" class="btn-save">Imprimir Ticket</button>
+        <button id="printDeliveryTicketButton" class="btn-save" style="display: none;">Imprimir Ticket de Envío</button>
+        <button id="closePrintModalButton" class="btn-back">Cerrar</button>
+    </div>
+</div>
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeConfirmationModal()">&times;</span>
+            <h2>Confirmar Eliminación</h2>
+            <p>¿Estás seguro de que deseas eliminar este pedido?</p>
+            <div class="modal-footer">
+                <button class="btn-save" onclick="confirmDeleteOrder()">Sí, eliminar</button>
+                <button class="btn-back" onclick="closeConfirmationModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="img/logo5.png" alt="Logo de la Empresa" class="logo">
+            <button class="close-btn" onclick="toggleSidebar()">×</button>
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+        <ul>
+            <li ><a href="index.html">Dashboard</a></li>
+            <li><a href="products.html">Gestión de Productos</a></li>
+            <li class="active"><a href="orders.html">Gestión de Pedidos</a></li>
+            <li><a href="Admin_ventas.html">Admin Ventas</a></li>
+            <li><a href="Ventas_realizadas.html">Ventas Realizadas</a></li>
+            <li ><a href="qr_generator.html">Stock de Productos</a></li>
+            <li ><a href="pedidos_entregados.html">Pedidos Entregados</a></li>
+            <li ><a href="registro.html">Pedidos Entregados</a></li>
+            
+        </ul>
+    </div>
+    <div class="main-content" id="main-content">
+        <header>
+            <button class="open-btn" onclick="toggleSidebar()">☰</button>
+            <h1>Gestión de Pedidos</h1>
+        </header>
+        <main>
+            <div id="alertsContainer" class="alerts-container"></div>
+            <div id="filterContainer">
+                <label for="filterStatus">Estado:</label>
+                <select id="filterStatus">
+                    <option value="all">Todos</option>
+                    <option value="completed">Entregado</option>
+                    <option value="pending">Pendiente</option>
+                </select>
+                <label for="filterStartDate">Fecha de Inicio:</label>
+                <input type="date" id="filterStartDate">
+                <label for="filterEndDate">Fecha de Fin:</label>
+                <input type="date" id="filterEndDate">
+                <label for="filterMonth">Mes:</label>
+                <input type="month" id="filterMonth">
+                <label for="filterDate">Fecha Exacta:</label>
+                <input type="date" id="filterDate">
+                <label for="filterText">Buscar:</label>
+                <input type="text" id="filterText" placeholder="Nombre o Teléfono">
+            </div>
+            <div id="salesSummary">
+                <div class="sales-summary-item">
+                    <h3>Adelantos Diarios</h3>
+                    <p id="dailyAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Adelantos Semanales</h3>
+                    <p id="weeklyAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Adelantos Mensuales</h3>
+                    <p id="monthlyAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Adelantos Anuales</h3>
+                    <p id="annualAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Transferencia</h3>
+                    <p id="transferAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Efectivo</h3>
+                    <p id="cashAdvances">0 Bs</p>
+                </div>
+                <div class="sales-summary-item">
+                    <h3>Total Adelantos</h3>
+                    <p id="totalAdvances">0 Bs</p>
+                </div>
+            </div>
+            
+            <button class="btn-add" onclick="openOrderModal()">Nuevo Pedido</button>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Cliente</th>
+                        <th>Celular</th>
+                        <th>Precio Total</th>
+                        <th>Adelanto</th>
+                        <th>Completado</th>
+                        
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="paginationContainer">
+                <button id="prevPage">Anterior</button>
+                <span>Página <span id="currentPage">1</span></span>
+                <button id="nextPage">Siguiente</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeOrderModal()">&times;</span>
+            <h2 id="modalTitle">Nuevo Pedido</h2>
+            <form id="orderForm" onsubmit="saveOrder(); return false;">
+                <div class="modal-row">
+                    <div class="modal-column column-40">
+                        
+                        <label for="customerName">Nombre del Cliente:</label>
+                        <input type="text" id="customerName" name="customerName" required>
+                        <label for="customerPhone">Celular:</label>
+                        <input type="text" id="customerPhone" name="customerPhone" required oninput="updateQRCode()">
+                    </div>
+                    <div class="modal-column column-40">
+                        <label for="productCombo">Producto:</label>
+                        <select id="productCombo" name="productCombo" required></select>
+                        <label for="productQuantity">Cantidad:</label>
+                        <input type="number" id="productQuantity" name="productQuantity" min="1" required>
+                        <div id="extrasContainer"></div>
+                        <button type="button" class="btn-add" onclick="addProduct()">Añadir Producto</button>
+                    </div>
+                    <div class="modal-column column-20">
+                        <label for="qrCode">Código QR:</label>
+                        <img id="qrCode" src="img/charger.gif" alt="" style="width: 150px; height: 150px;">
+                        
+                    </div>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-column">
+                        <h3>Lista de Productos</h3>
+                        <table id="selectedProductsTable">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Extras</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="modal-column">
+                        <div class="modal-row">
+                            <div class="modal-column">
+                                <label for="discount">Descuento (Bs):</label>
+                                <input type="number" id="discount" name="discount" step="0.01" oninput="updateTotalPrice()">
+                            </div>
+                            <div class="modal-column">
+                                <label for="totalPrice">Precio Total (Bs):</label>
+                                <input type="number" id="totalPrice" name="totalPrice" readonly>
+                            </div>
+                        </div>
+                        <div class="modal-row">
+                            <div class="modal-column">
+                                <label for="advance">Adelanto (Bs):</label>
+                                <input type="number" id="advance" name="advance" step="0.01" oninput="updateBalance()">
+                            </div>
+                            <div class="modal-column">
+                                <label for="paymentMethod">Método de Pago:</label>
+                                <select id="paymentMethod" name="paymentMethod">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                </select>
+                            </div>
+                            <div class="modal-column">
+                                <label for="balance">Saldo (Bs):</label>
+                                <input type="number" id="balance" name="balance" readonly>
+                            </div>
+                        </div>
+                        <div class="modal-row">
+                            <div class="modal-column">
+                                <label for="startDate">Fecha de Inicio:</label>
+                                <input type="text" id="startDate" name="startDate" readonly>
+                            </div>
+                            <div class="modal-column">
+                                <label for="deliveryDate">Fecha de Entrega:</label>
+                                <input type="date" id="deliveryDate" name="deliveryDate" required>
+                            </div>
+                            <div class="modal-column">
+                                <label for="deliveryMethod">Método de Entrega:</label>
+                                <select id="deliveryMethod" name="deliveryMethod" onchange="toggleDeliveryOptions()" required>
+                                    <option value="Entrega en Tienda">Entrega en Tienda</option>
+                                    <option value="Envío">Envío</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-row" id="deliveryOptionsContainer">
+                            <div class="modal-column">
+                                <label for="department">Departamento:</label>
+                                <select id="department" name="department" required>
+                                    <option value="La Paz">La Paz</option>
+                                    <option value="Cochabamba">Cochabamba</option>
+                                    <option value="Santa Cruz">Santa Cruz</option>
+                                    <option value="Oruro">Oruro</option>
+                                    <option value="Potosí">Potosí</option>
+                                    <option value="Chuquisaca">Chuquisaca</option>
+                                    <option value="Tarija">Tarija</option>
+                                    <option value="Beni">Beni</option>
+                                    <option value="Pando">Pando</option>
+                                </select>
+                            </div>
+                            <div class="modal-column">
+                                <label for="address">Dirección:</label>
+                                <input type="text" id="address" name="address">
+                            </div>
+                            <div class="modal-column">
+                                <label for="carnet">Carnet:</label>
+                                <input type="text" id="carnet" name="carnet">
+                            </div>
+                            <div class="modal-column">
+                                <label for="branch">Sucursal:</label>
+                                <input type="text" id="branch" name="branch">
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <img id="qrCode2" src="" alt="Código QR" style="display: none;"/>
+                    <button type="submit" class="btn-save">Guardar Pedido</button>
+                    <button type="button" class="btn-back" onclick="closeOrderModal()">Cancelar</button>
+                    <button type="button" class="btn-save" id="printTicketButton" onclick="printTicket(editingOrderId)" style="display: none;">Imprimir Ticket</button>
+                    <button type="button" class="btn-save" onclick="printDeliveryTicket(editingOrderId)" id="printDeliveryTicketButton" style="display: none;">Imprimir Ticket de Envío</button>
+                </div>
+                
+
+            </form>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/orders.js"></script>
+</body>
+</html>
