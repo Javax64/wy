@@ -99,7 +99,7 @@ function setupWebSocket() {
     }
 }
 
-setupWebSocket();
+
 function goBack() {
     window.history.back();
 }
