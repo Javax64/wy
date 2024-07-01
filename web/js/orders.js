@@ -81,7 +81,7 @@ async function confirmDeleteOrder() {
 }
 function setupWebSocket() {
     try {
-        eel._websocket = new WebSocket('ws://localhost:8000/eel?page=' + window.location.pathname.split('/').pop());
+        eel._websocket = new WebSocket('ws://localhost:8099/eel?page=' + window.location.pathname.split('/').pop());
         eel._websocket.onopen = function() {
             console.log("WebSocket connection established");
         };
@@ -464,7 +464,7 @@ async function saveOrder() {
             orderId = await eel.add_order(JSON.stringify(orderData))();
             showAlert('Pedido guardado con éxito', 'success');
             const qrFilename = await eel.generate_qr_code2(orderId)();
-            const qrLink = `http://localhost:8000/mark_as_completed?order_id=${qrFilename}`;
+            const qrLink = `http://localhost:8099/mark_as_completed?order_id=${qrFilename}`;
             console.log("QR code link:", qrLink); 
             
             showAlert(`Pedido guardado con éxito. Verifica el enlace QR: ${qrLink}`, 'success');

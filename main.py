@@ -8,7 +8,7 @@ import qrcode
 import io
 import base64
 import os
-
+import time
 import sqlite3
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageWin
 
@@ -33,34 +33,6 @@ from bottle import Bottle, static_file, abort
 app = Bottle()
 
 ##################PRODUCTOS##################
-"""@eel.expose
-def get_products():
-    conn = get_mysql_connection()
-    c = conn.cursor()
-    
-    c.execute("SELECT p.id, p.name, p.price, e.id, e.name, e.price FROM productos p LEFT JOIN extras e ON p.id = e.product_id WHERE p.active = 1 AND (e.id IS NULL OR e.active = 1)")
-    rows = c.fetchall()
-    
-    products = {}
-    for row in rows:
-        product_id, product_name, product_price, extra_id, extra_name, extra_price = row
-        if product_id not in products:
-            products[product_id] = {
-                'id': product_id,
-                'name': product_name,
-                'price': product_price,
-                'extras': []
-            }
-        if extra_id:
-            products[product_id]['extras'].append({
-                'id': extra_id,
-                'name': extra_name,
-                'price': extra_price
-            })
-    
-    conn.close()
-    return list(products.values())
-"""
 
 @eel.expose
 def get_products():
@@ -2601,14 +2573,15 @@ def error404(error):
 def hello():
     return "Hello World!"
 def start_server():
-    #eel.init('web')
-    #Iniciar Eel con Bottle como el servidor
-    #eel.start('login.html', mode=None, host='0.0.0.0', port=8000, app=app)
-    #eel.start('login.html', mode=None, host='localhost', port=8000, app=app)
     eel.init('web')
-    port = int(os.environ.get("PORT", 8000))  # Usar el puerto proporcionado por Railway
-    print(f"Starting server on port {port}...")
-    eel.start('index.html', mode=None, host='0.0.0.0', port=port, app=app)
+    # Iniciar Eel con Bottle como el servidor
+    eel.start('login.html', mode=None, host='0.0.0.0', port=8099, app=app)
+    #eel.start('login.html', mode=None, host='localhost', port=8000,debug=True)
 
 if __name__ == '__main__':
-    start_server()
+    while True:
+        try:
+            start_server()
+        except Exception as e:
+            logging.error(f"Error occurred: {e}")
+            time.sleep(5)  # Espera unos segundos antes de reiniciar
