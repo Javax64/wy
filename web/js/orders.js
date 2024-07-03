@@ -366,12 +366,7 @@ async function printTicket(orderId) {
 }
 async function fetchAdvanceSummaries(filterDate, filterStartDate, filterEndDate, filterMonth) {
     try {
-        console.log("Fetching advance summaries with filters:", {
-            filterDate,
-            filterStartDate,
-            filterEndDate,
-            filterMonth
-        });
+        
 
         const summaries = await eel.fetch_advance_summaries(
             filterDate,
