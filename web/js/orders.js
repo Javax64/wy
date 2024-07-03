@@ -316,6 +316,7 @@ async function printTicket(orderId) {
         
         // Obtener la ruta de la imagen optimizada
         const ticketImagePath = await eel.print_ticket(JSON.stringify(order))();
+        console.log(ticketImagePath)
         if (!ticketImagePath) {
             console.log('medio de la tragedia')
             throw new Error('Failed to generate ticket image');
