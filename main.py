@@ -2577,7 +2577,7 @@ def start_server():
     # Iniciar Eel con Bottle como el servidor
     eel.start('login.html', mode=None, host='0.0.0.0', port=8099, app=app)
     #eel.start('login.html', mode=None, host='localhost', port=8000,debug=True)
-
+##segunda res
 if __name__ == '__main__':
     while True:
         try:

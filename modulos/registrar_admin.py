@@ -1,4 +1,4 @@
-from modulos.database import agregar_usuario
+from database import agregar_usuario
 
 def main():
     username = 'javax'  # Cambia esto por el nombre de usuario que desees
