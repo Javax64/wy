@@ -9,7 +9,7 @@ async function iniciarSesion() {
         if (response.role === 'admin') {
             window.location.href = 'index.html';
         } else {
-            window.location.href = 'admin_ventas.html';
+            window.location.href = 'Admin_ventas.html';
         }
     } else {
         alert('Inicio de sesión fallido');
