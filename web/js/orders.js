@@ -947,13 +947,7 @@ async function calculateAdvances(filterDate, filterStartDate, filterEndDate, fil
     document.getElementById('cashAdvances').innerText = `${cashAdvances} Bs`;
     document.getElementById('totalAdvances').innerText = `${totalAdvances} Bs`;
 
-    console.log('dailyAdvances final:', dailyAdvances);
-    console.log('weeklyAdvances final:', weeklyAdvances);
-    console.log('monthlyAdvances final:', monthlyAdvances);
-    console.log('annualAdvances final:', annualAdvances);
-    console.log('transferAdvances final:', transferAdvances);
-    console.log('cashAdvances final:', cashAdvances);
-    console.log('totalAdvances final:', totalAdvances);
+    
 }
 
 document.getElementById('filterStatus').addEventListener('change', applyFilters);
