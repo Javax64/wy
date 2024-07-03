@@ -9,7 +9,7 @@ import io
 import base64
 import os
 import time
-import sqlite3
+#import sqlite3
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageWin
 
 import json
@@ -2113,47 +2113,6 @@ def update_delivery_date_in_completed_orders(order_id, delivery_date):
 
 
 #############--PEDIDOS COMPLETADOS -##############
-@eel.expose
-def get_completed_orders():
-    conn = sqlite3.connect('gestion_pedidos.db')
-    cursor = conn.cursor()
-    
-    # Consulta para obtener los pedidos completados
-    cursor.execute('''
-        SELECT id, customer_name, customer_phone, products, discount, total_price, down_payment, balance_due, 
-               start_date, delivery_date, delivery_method, department, address, carnet, branch, payment_method, pedido_id 
-        FROM pedidos_completados
-    ''')
-    
-    orders = cursor.fetchall()
-    conn.close()
-
-    # Transformar los datos en una lista de diccionarios
-    orders_list = [
-        {
-            'id': order[0],
-            'customer_name': order[1],
-            'customer_phone': order[2],
-            'products': order[3],
-            'discount': order[4],
-            'total_price': order[5],
-            'down_payment': order[6],
-            'balance_due': order[7],
-            'start_date': order[8],
-            'delivery_date': order[9],
-            'delivery_method': order[10],
-            'department': order[11],
-            'address': order[12],
-            'carnet': order[13],
-            'branch': order[14],
-            'payment_method': order[15],
-            'pedido_id': order[16]
-        }
-        for order in orders
-    ]
-    
-    return orders_list
-
 
 ##########--FIN PEDIDOS COMPLETADOS-- ############
 
