@@ -4,9 +4,9 @@ import os
 def get_mysql_connection():
     return mysql.connector.connect(
         host="localhost",
-        user="javax3",
+        user="javax2",
         password="77754abel867",
-        database="admin2"
+        database="administracionWY"
     )
 def drop_tables():
     conn = get_mysql_connection()
