@@ -312,13 +312,15 @@ async function printTicket(orderId) {
 
         // Añadir el order_id al objeto de pedido
         order.order_id = orderId;
-
+        console.log('antes de al tragedia')
+        
         // Obtener la ruta de la imagen optimizada
         const ticketImagePath = await eel.print_ticket(JSON.stringify(order))();
         if (!ticketImagePath) {
+            console.log('medio de la tragedia')
             throw new Error('Failed to generate ticket image');
         }
-
+        console.log('despues de la tragedia')
         // Crear una URL completa para la imagen
         const fullImagePath = window.location.origin + ticketImagePath;
 
